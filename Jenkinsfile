@@ -16,12 +16,13 @@ pipeline {
                         NODE_VERSION="20.11.0"
                         NODE_DIST="node-v${NODE_VERSION}-linux-x64"
                         cd /tmp
-                        curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.xz" -o node.tar.xz || \
-                        wget -q "https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.xz" -O node.tar.xz
-                        tar -xf node.tar.xz
+                        curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.gz" -o node.tar.gz || \
+                        wget -q "https://nodejs.org/dist/v${NODE_VERSION}/${NODE_DIST}.tar.gz" -O node.tar.gz
+                        tar -xzf node.tar.gz
                         export PATH="/tmp/${NODE_DIST}/bin:$PATH"
                         echo "Node.js installed to /tmp/${NODE_DIST}"
                     fi
+                    export PATH="/tmp/${NODE_DIST}/bin:$PATH"
                     node --version
                     npm --version
                 '''
