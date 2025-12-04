@@ -1,14 +1,28 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18-alpine'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Setup Node.js') {
+            steps {
+                sh '''
+                    if ! command -v node &> /dev/null; then
+                        echo "Installing Node.js..."
+                        curl -fsSL https://deb.nodesource.com/setup_18.x | bash - || \
+                        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || \
+                        (wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash)
+                        export NVM_DIR="$HOME/.nvm"
+                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                        nvm install 18 || echo "Node.js installation failed, trying system node..."
+                    fi
+                    node --version
+                    npm --version
+                '''
             }
         }
 
