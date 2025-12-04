@@ -1,14 +1,53 @@
+import { Link } from 'react-router-dom'
 import './index.css'
+
+const projects = [
+  {
+    id: 'etnogring',
+    title: 'EtnoGring – Village Tourism CMS (UNESA)',
+    description: 'Platform jaringan & CMS untuk administrasi wisata desa. Saya membangun fitur galeri budaya, dokumentasi tradisi, dan dua dashboard interaktif untuk pengelolaan konten & dokumen penting.',
+    tags: ['Laravel', 'CMS', 'Dashboard']
+  },
+  {
+    id: 'mifta-motorsport',
+    title: 'Mifta Motorsport – Service Booking Module',
+    description: 'Modul booking servis end‑to‑end dengan validasi time‑slot, pencegahan double booking, scheduler auto‑complete, helper gambar yang fleksibel, serta strategi cache & log rotation untuk performa optimal.',
+    tags: ['Laravel', 'Scheduler', 'Caching']
+  },
+  {
+    id: 'android-flutter',
+    title: 'Android & Flutter Apps (BINUS)',
+    description: 'Pengembangan aplikasi mobile menggunakan Android SDK & Flutter (BLoC). Fokus pada konfigurasi build, debugging dengan ADB, state management yang rapi, dan optimasi memori agar aplikasi stabil.',
+    tags: ['Android SDK', 'Flutter', 'BLoC']
+  },
+  {
+    id: 'project-1',
+    title: 'Project 1',
+    description: 'Deskripsi singkat project. Tulis apa yang kamu kerjakan, tech stack, dan hasilnya.',
+    tags: ['React', 'UI']
+  },
+  {
+    id: 'project-2',
+    title: 'Project 2',
+    description: 'Deskripsi singkat project lain. Bisa landing page, dashboard, atau portfolio untuk orang lain.',
+    tags: ['TypeScript', 'API']
+  },
+  {
+    id: 'project-3',
+    title: 'Project 3',
+    description: 'Satu lagi project yang kamu banggakan. Tambahkan link ke GitHub atau demo kalau ada.',
+    tags: ['Fullstack', 'Deployment']
+  }
+]
 
 function App() {
   return (
     <div className="page">
       <header className="nav">
-        <div className="nav-logo">Porto.</div>
+        <Link to="/" className="nav-logo">Porto.</Link>
         <nav className="nav-links">
           <a href="#about">About</a>
           <a href="#projects">Projects</a>
-          <a href="#contact">Contact</a>
         </nav>
       </header>
 
@@ -28,9 +67,6 @@ function App() {
             <div className="hero-actions">
               <a href="#projects" className="btn btn-primary">
                 View Projects
-              </a>
-              <a href="#contact" className="btn btn-ghost">
-                Contact Me
               </a>
             </div>
             <div className="hero-tags">
@@ -120,125 +156,32 @@ function App() {
           <div className="projects-marquee">
             <div className="projects-track">
               {/* Satu set project */}
-              <article className="project-card">
-                <h3>EtnoGring – Village Tourism CMS (UNESA)</h3>
-                <p>
-                  Platform jaringan & CMS untuk administrasi wisata desa. Saya
-                  membangun fitur galeri budaya, dokumentasi tradisi, dan dua
-                  dashboard interaktif untuk pengelolaan konten & dokumen
-                  penting.
-                </p>
-                <div className="project-tags">
-                  <span>Laravel</span>
-                  <span>CMS</span>
-                  <span>Dashboard</span>
-                </div>
-              </article>
-              <article className="project-card">
-                <h3>Mifta Motorsport – Service Booking Module</h3>
-                <p>
-                  Modul booking servis end‑to‑end dengan validasi time‑slot,
-                  pencegahan double booking, scheduler auto‑complete, helper
-                  gambar yang fleksibel, serta strategi cache & log rotation
-                  untuk performa optimal.
-                </p>
-                <div className="project-tags">
-                  <span>Laravel</span>
-                  <span>Scheduler</span>
-                  <span>Caching</span>
-                </div>
-              </article>
-              <article className="project-card">
-                <h3>Android & Flutter Apps (BINUS)</h3>
-                <p>
-                  Pengembangan aplikasi mobile menggunakan Android SDK & Flutter
-                  (BLoC). Fokus pada konfigurasi build, debugging dengan ADB,
-                  state management yang rapi, dan optimasi memori agar aplikasi
-                  stabil.
-                </p>
-                <div className="project-tags">
-                  <span>Android SDK</span>
-                  <span>Flutter</span>
-                  <span>BLoC</span>
-                </div>
-              </article>
+              {projects.map((project) => (
+                <Link key={project.id} to={`/project/${project.id}`} className="project-card project-card-link">
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                  <div className="project-tags">
+                    {project.tags.map((tag, index) => (
+                      <span key={index}>{tag}</span>
+                    ))}
+                  </div>
+                </Link>
+              ))}
 
               {/* Duplikasi untuk efek loop halus */}
-              <article className="project-card">
-                <h3>Project 1</h3>
-                <p>
-                  Deskripsi singkat project. Tulis apa yang kamu kerjakan, tech
-                  stack, dan hasilnya.
-                </p>
-                <div className="project-tags">
-                  <span>React</span>
-                  <span>UI</span>
-                </div>
-              </article>
-              <article className="project-card">
-                <h3>Project 2</h3>
-                <p>
-                  Deskripsi singkat project lain. Bisa landing page, dashboard,
-                  atau portfolio untuk orang lain.
-                </p>
-                <div className="project-tags">
-                  <span>TypeScript</span>
-                  <span>API</span>
-                </div>
-              </article>
-              <article className="project-card">
-                <h3>Project 3</h3>
-                <p>
-                  Satu lagi project yang kamu banggakan. Tambahkan link ke GitHub
-                  atau demo kalau ada.
-                </p>
-                <div className="project-tags">
-                  <span>Fullstack</span>
-                  <span>Deployment</span>
-                </div>
-              </article>
+              {projects.map((project) => (
+                <Link key={`duplicate-${project.id}`} to={`/project/${project.id}`} className="project-card project-card-link">
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                  <div className="project-tags">
+                    {project.tags.map((tag, index) => (
+                      <span key={index}>{tag}</span>
+                    ))}
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
-        </section>
-
-        {/* Contact */}
-        <section id="contact" className="section section-contact">
-          <div className="section-header">
-            <h2>Contact</h2>
-            <p>
-              Siap kerja sama atau butuh bantuan project? Kirim pesan ke email
-              di bawah.
-            </p>
-          </div>
-          <form
-            className="contact-form"
-            onSubmit={(e) => {
-              e.preventDefault()
-              alert('Form dummy – ganti dengan integrasi email nanti 🙂')
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Nama kamu"
-              className="input"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email kamu"
-              className="input"
-              required
-            />
-            <textarea
-              placeholder="Ceritakan sedikit tentang project atau pertanyaanmu..."
-              className="textarea"
-              rows={4}
-              required
-            />
-            <button type="submit" className="btn btn-primary full">
-              Send Message
-            </button>
-          </form>
         </section>
       </main>
 
