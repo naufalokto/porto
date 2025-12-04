@@ -415,23 +415,37 @@ main {
 
 .projects-marquee {
   position: relative;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+  padding-bottom: 8px;
+}
+
+.projects-marquee::-webkit-scrollbar {
+  height: 8px;
+}
+
+.projects-marquee::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.projects-marquee::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+.projects-marquee::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
 }
 
 .projects-track {
   display: inline-flex;
   gap: 14px;
   min-width: max-content;
-  animation: projects-scroll 30s linear infinite;
-}
-
-@keyframes projects-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 .section-contact {

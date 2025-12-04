@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+import type { WheelEvent } from 'react'
 import { Link } from 'react-router-dom'
 import './index.css'
 
@@ -41,6 +43,64 @@ const projects = [
 ]
 
 function App() {
+  const marqueeRef = useRef<HTMLDivElement | null>(null)
+  const [isUserInteracting, setIsUserInteracting] = useState(false)
+  const interactionTimeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const container = marqueeRef.current
+    if (!container) return
+
+    let frameId: number
+
+    const step = () => {
+      if (!isUserInteracting) {
+        const maxScroll = container.scrollWidth - container.clientWidth
+
+        if (maxScroll > 0) {
+          if (container.scrollLeft >= maxScroll) {
+            container.scrollLeft = 0
+          } else {
+            container.scrollLeft += 0.4
+          }
+        }
+      }
+
+      frameId = window.requestAnimationFrame(step)
+    }
+
+    frameId = window.requestAnimationFrame(step)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+    }
+  }, [isUserInteracting])
+
+  const markInteracting = () => {
+    setIsUserInteracting(true)
+
+    if (interactionTimeoutRef.current !== null) {
+      window.clearTimeout(interactionTimeoutRef.current)
+    }
+
+    interactionTimeoutRef.current = window.setTimeout(() => {
+      setIsUserInteracting(false)
+    }, 1500)
+  }
+
+  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+    const container = marqueeRef.current
+    if (!container) return
+
+    // Ubah scroll vertikal menjadi horizontal di dalam area projects
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault()
+      container.scrollLeft += event.deltaY
+    }
+
+    markInteracting()
+  }
+
   return (
     <div className="page">
       <header className="nav">
@@ -153,29 +213,26 @@ function App() {
               Full‑stack Developer dan mahasiswa.
             </p>
           </div>
-          <div className="projects-marquee">
+          <div
+            className="projects-marquee"
+            ref={marqueeRef}
+            onWheel={handleWheel}
+            onMouseDown={markInteracting}
+            onTouchStart={markInteracting}
+          >
             <div className="projects-track">
-              {/* Satu set project */}
-              {projects.map((project) => (
-                <Link key={project.id} to={`/project/${project.id}`} className="project-card project-card-link">
+              {/* Satu set project (di-loop terus untuk efek panjang) */}
+              {projects.concat(projects).map((project, index) => (
+                <Link
+                  key={`${project.id}-${index}`}
+                  to={`/project/${project.id}`}
+                  className="project-card project-card-link"
+                >
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
                   <div className="project-tags">
-                    {project.tags.map((tag, index) => (
-                      <span key={index}>{tag}</span>
-                    ))}
-                  </div>
-                </Link>
-              ))}
-
-              {/* Duplikasi untuk efek loop halus */}
-              {projects.map((project) => (
-                <Link key={`duplicate-${project.id}`} to={`/project/${project.id}`} className="project-card project-card-link">
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                  <div className="project-tags">
-                    {project.tags.map((tag, index) => (
-                      <span key={index}>{tag}</span>
+                    {project.tags.map((tag, tagIndex) => (
+                      <span key={tagIndex}>{tag}</span>
                     ))}
                   </div>
                 </Link>
